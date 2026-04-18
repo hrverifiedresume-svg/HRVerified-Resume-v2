@@ -1,1 +1,4 @@
-/* auto-generated css */
+/* Global Styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
