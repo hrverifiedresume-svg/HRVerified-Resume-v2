@@ -2,20 +2,6 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- Users Table (Core user information)
-CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    email VARCHAR(255) UNIQUE NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    profile_photo_url TEXT,
-    phone VARCHAR(20),
-    headline VARCHAR(255),
-    bio TEXT,
-    quote VARCHAR(500),
-    university_id UUID, -- REFERENCES organizations(id) (Added later to avoid circular dependency if creating out of order, or we can just reference it since organizations is down below, wait, let's create organizations first if possible, or just define it. Ah, I will keep the schema exactly as provided. Wait, the prompt provided it with `university_id UUID REFERENCES organizations(id)`. I need to re-order the creation because `organizations` is table 6 and `users` is table 1. Actually, PostgreSQL will fail if the referenced table doesn't exist yet. I should move organizations up OR use ALTER TABLE later.)
-
--- Let's extract exactly as provided by the user, but maybe PostgreSQL will error out if organizations doesn't exist. Let's fix the order.
-
 -- 1. ORGANIZATIONS & B2B TABLES (Moved up to satisfy foreign key in users)
 CREATE TABLE organizations (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
